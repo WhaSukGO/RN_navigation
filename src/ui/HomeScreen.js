@@ -1,8 +1,28 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-// import moduleName from 'module'
+import { connect } from "react-redux";
+import { updateBLE } from "../redux/actions/bleAction";
 
-export default class HomeScreen extends Component {
+class HomeScreen extends Component {
+  componentDidMount() {
+    const { updateBLE } = this.props;
+
+    setInterval(() => {
+      updateBLE("#");
+    }, 3000);
+  }
+
+  // onPressLog = () => {
+  //   const { log } = this.props;
+
+  //   const d = new Date();
+  //   const n = d.getTime();
+
+  //   console.log(n);
+  //   console.log(log);
+  //   console.log();
+  // };
+
   render() {
     const { navigation } = this.props;
 
@@ -16,6 +36,7 @@ export default class HomeScreen extends Component {
             alignItems: "center",
             width: "100%",
           }}
+          // onPress={() => this.onPressLog()}
           onPress={() => navigation.navigate("Details")}
         >
           <Text>Details</Text>
@@ -36,3 +57,9 @@ export default class HomeScreen extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => ({
+  log: state.ble.log,
+});
+
+export default connect(mapStateToProps, { updateBLE })(HomeScreen);
