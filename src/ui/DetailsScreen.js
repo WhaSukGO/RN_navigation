@@ -4,25 +4,22 @@ import { connect } from "react-redux";
 import { clearBLE } from "../redux/actions/bleAction";
 
 class DetailsScreen extends Component {
-  onPressUpdate = () => {
-    const { log, clearBLE } = this.props;
-
-    const data = log.substring(0, 62);
-
-    l = data.length;
-
-    clearBLE(l);
+  onPressSend = () => {
+    this.props.route.params.sendSignal("WOW!~~");
   };
 
-  onPressNow = () => {
-    console.log(this.props.log);
+  onPressReceive = () => {
+    this.props.route.params.receiveSignal("NO!~~");
   };
 
   render() {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <TouchableOpacity onPress={this.onPressUpdate}>
-          <Text>GET!</Text>
+        <TouchableOpacity onPress={() => this.onPressSend()}>
+          <Text>Send</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.onPressReceive()}>
+          <Text>Receive</Text>
         </TouchableOpacity>
       </View>
     );

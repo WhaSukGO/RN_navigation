@@ -1,27 +1,16 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { connect } from "react-redux";
-import { updateBLE } from "../redux/actions/bleAction";
 
-class HomeScreen extends Component {
-  componentDidMount() {
-    const { updateBLE } = this.props;
+export default class HomeScreen extends Component {
+  // 다른 화면에서 호출할 함수 #1
+  sendSignal = (msg) => {
+    console.log(`[MSG] Sending! ${msg}`);
+  };
 
-    setInterval(() => {
-      updateBLE("#");
-    }, 3000);
-  }
-
-  // onPressLog = () => {
-  //   const { log } = this.props;
-
-  //   const d = new Date();
-  //   const n = d.getTime();
-
-  //   console.log(n);
-  //   console.log(log);
-  //   console.log();
-  // };
+  // 다른 화면에서 호출할 함수 #2
+  receiveSignal = (msg) => {
+    console.log(`[MSG] Received! ${msg}`);
+  };
 
   render() {
     const { navigation } = this.props;
@@ -29,37 +18,26 @@ class HomeScreen extends Component {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <TouchableOpacity
-          style={{
-            backgroundColor: "green",
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
+          style={{ flex: 1 }}
+          onPress={() => {
+            navigation.navigate("Details", {
+              sendSignal: this.sendSignal,
+              receiveSignal: this.receiveSignal,
+
+              // 그 외, 다른 함수들...
+              // 이름이 동일할 필요 X
+              // ex) aaa : this.sendSignal
+              // 위의 코드도 작동함. 다만, DetailsScreen.js에서, sendSignal을 호출하려면
+              // this.props.route.params.aaa("WOW!~~");
+            });
           }}
-          // onPress={() => this.onPressLog()}
-          onPress={() => navigation.navigate("Details")}
         >
-          <Text>Details</Text>
+          <Text>Hello</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={{
-            backgroundColor: "red",
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            width: "100%",
-          }}
-          onPress={() => navigation.navigate("Information")}
-        >
-          <Text>Information</Text>
+        <TouchableOpacity style={{ flex: 1 }}>
+          <Text>Bye</Text>
         </TouchableOpacity>
       </View>
     );
   }
 }
-
-const mapStateToProps = (state) => ({
-  log: state.ble.log,
-});
-
-export default connect(mapStateToProps, { updateBLE })(HomeScreen);
